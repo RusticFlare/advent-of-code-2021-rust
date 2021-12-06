@@ -1,1 +1,5 @@
 /target
+
+.idea/
+
+advent-of-code-2021-rust.iml
