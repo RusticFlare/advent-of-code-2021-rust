@@ -57,9 +57,19 @@ impl Line {
 }
 
 pub fn part_1(input: &str) -> usize {
-    parse_lines(input)
-        .iter()
+    let lines:Vec<Line> = parse_lines(input)
+        .into_iter()
         .filter(|line| line.is_horizontal_or_vertical())
+        .collect();
+    score(lines)
+}
+
+pub fn part_2(input: &str) -> usize {
+    score(parse_lines(input))
+}
+
+fn score(lines: Vec<Line>) -> usize {
+    lines.iter()
         .flat_map(|line| line.points())
         .fold(HashMap::new(), |mut acc, point| {
             *acc.entry(point).or_insert(0) += 1;
@@ -68,10 +78,6 @@ pub fn part_1(input: &str) -> usize {
         .iter()
         .filter(|(_, &count)| count > 1)
         .count()
-}
-
-pub fn part_2(input: &str) -> u32 {
-    return 0;
 }
 
 fn parse_lines(input: &str) -> Vec<Line> {
