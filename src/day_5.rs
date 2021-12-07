@@ -1,5 +1,6 @@
 use regex::Regex;
 use std::collections::HashMap;
+
 pub mod input;
 
 struct Line {
@@ -31,7 +32,7 @@ impl Line {
             }
             .map(|x| (x, self.y1))
             .collect()
-        } else {
+        } else if self.is_horizontal() {
             if self.y1 < self.y2 {
                 self.y1..=self.y2
             } else {
@@ -39,6 +40,18 @@ impl Line {
             }
             .map(|y| (self.x1, y))
             .collect()
+        } else {
+            let xs: Vec<u32> = if self.x1 <= self.x2 {
+                (self.x1..=self.x2).collect()
+            } else {
+                (self.x2..=self.x1).rev().collect()
+            };
+            let ys: Vec<u32> = if self.y1 <= self.y2 {
+                (self.y1..=self.y2).collect()
+            } else {
+                (self.y2..=self.y1).rev().collect()
+            };
+            xs.iter().zip(ys.iter()).map(|(&x,&y)| (x,y)).collect()
         }
     }
 }
