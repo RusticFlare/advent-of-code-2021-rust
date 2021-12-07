@@ -42,7 +42,35 @@ impl BingoCard {
 }
 
 pub fn part_1(input: &str) -> u32 {
-    let mut bingo_cards = input
+    let mut bingo_cards = bingo_cards(input);
+
+    let values = values_called(input);
+
+    for value in values {
+        bingo_cards = bingo_cards
+            .iter()
+            .map(|card| mark_value(card, value))
+            .collect();
+        let winner = bingo_cards.iter().find(|card| card.is_winner());
+        if winner.is_some() {
+            return winner.unwrap().score() * value;
+        }
+    }
+    return 0;
+}
+
+fn values_called(input: &str) -> Vec<u32> {
+    input
+        .lines()
+        .next()
+        .unwrap()
+        .split(",")
+        .map(|i| i.parse::<u32>().unwrap())
+        .collect()
+}
+
+fn bingo_cards(input: &str) -> Vec<BingoCard> {
+    input
         .split("\n\n")
         .dropping(1)
         .map(|s| s.lines())
@@ -56,49 +84,49 @@ pub fn part_1(input: &str) -> u32 {
         })
         .map(|s| s.collect::<Vec<Vec<u32>>>())
         .map(|card_values| BingoCard::new(card_values))
-        .collect::<Vec<BingoCard>>();
+        .collect::<Vec<BingoCard>>()
+}
 
-    let values = input
-        .lines()
-        .next()
-        .unwrap()
-        .split(",")
-        .map(|i| i.parse::<u32>().unwrap());
+pub fn part_2(input: &str) -> u32 {
+    let mut bingo_cards = bingo_cards(input);
+
+    let values = values_called(input);
 
     for value in values {
+        let score = bingo_cards[0].score();
         bingo_cards = bingo_cards
             .iter()
-            .map(|card| BingoCard {
-                values: card.values.iter().map(|i| i.iter().map(|&j|j).collect()).collect(),
-                marked: card
-                    .marked
-                    .iter()
-                    .enumerate()
-                    .map(|(r, row)| {
-                        row.iter()
-                            .enumerate()
-                            .map(|(c, &old)| {
-                                if card.values[r][c] == value {
-                                    true
-                                } else {
-                                    old
-                                }
-                            })
-                            .collect()
-                    })
-                    .collect(),
-            })
+            .map(|card| mark_value(card, value))
+            .filter(|card| !card.is_winner())
             .collect();
-        let winner = bingo_cards.iter().find(|card| card.is_winner());
-        if winner.is_some() {
-            return winner.unwrap().score() * value;
+        if bingo_cards.len() == 0 {
+            return (score - value) * value;
         }
     }
     return 0;
 }
 
-pub fn part_2(input: &str) -> u32 {
-    0
+fn mark_value(card: &BingoCard, value: u32) -> BingoCard {
+    BingoCard {
+        values: card.values.iter().map(|i| i.iter().map(|&j| j).collect()).collect(),
+        marked: card
+            .marked
+            .iter()
+            .enumerate()
+            .map(|(r, row)| {
+                row.iter()
+                    .enumerate()
+                    .map(|(c, &old)| {
+                        if card.values[r][c] == value {
+                            true
+                        } else {
+                            old
+                        }
+                    })
+                    .collect()
+            })
+            .collect(),
+    }
 }
 
 #[cfg(test)]
@@ -115,6 +143,6 @@ mod test {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(230, part_2(input::TEST_INPUT));
+        assert_eq!(1924, part_2(input::TEST_INPUT));
     }
 }
