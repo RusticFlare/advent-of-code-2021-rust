@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use regex::Regex;
+use std::collections::HashMap;
 pub mod input;
 
 struct Line {
@@ -28,46 +28,52 @@ impl Line {
                 self.x1..=self.x2
             } else {
                 self.x2..=self.x1
-            }.map(|x| (x,self.y1)).collect()
+            }
+            .map(|x| (x, self.y1))
+            .collect()
         } else {
             if self.y1 < self.y2 {
                 self.y1..=self.y2
             } else {
                 self.y2..=self.y1
-            }.map(|y| (self.x1,y)).collect()
+            }
+            .map(|y| (self.x1, y))
+            .collect()
         }
     }
 }
 
 pub fn part_1(input: &str) -> usize {
-    return parse_lines(input)
+    parse_lines(input)
         .iter()
         .filter(|line| line.is_horizontal_or_vertical())
         .flat_map(|line| line.points())
-        .fold(HashMap::new(), |mut acc, point|{
+        .fold(HashMap::new(), |mut acc, point| {
             *acc.entry(point).or_insert(0) += 1;
             acc
         })
         .iter()
         .filter(|(_, &count)| count > 1)
-        .count();
+        .count()
+}
+
+pub fn part_2(input: &str) -> u32 {
+    return 0;
 }
 
 fn parse_lines(input: &str) -> Vec<Line> {
     let re = Regex::new(r"(?P<x1>\d+),(?P<y1>\d+) -> (?P<x2>\d+),(?P<y2>\d+)").unwrap();
 
-    return  input.lines()
+    return input
+        .lines()
         .map(|line| re.captures(line).unwrap())
         .map(|caps| Line {
             x1: caps.name("x1").unwrap().as_str().parse().unwrap(),
             y1: caps.name("y1").unwrap().as_str().parse().unwrap(),
             x2: caps.name("x2").unwrap().as_str().parse().unwrap(),
             y2: caps.name("y2").unwrap().as_str().parse().unwrap(),
-        }).collect();
-}
-
-pub fn part_2(input: &str) -> u32 {
-    return 0;
+        })
+        .collect();
 }
 
 #[cfg(test)]
