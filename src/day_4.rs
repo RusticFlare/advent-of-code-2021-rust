@@ -20,24 +20,21 @@ impl BingoCard {
             || self
                 .marked
                 .iter()
-                .map(|row| row.iter().map(|&b| b).collect::<Vec<bool>>())
-                .reduce(|acc, row| acc.iter().zip(row.iter()).map(|(a, b)| a & b).collect())
+                .map(|row| Box::new(row.iter().map(|&b| b)) as Box<dyn Iterator<Item = bool>>)
+                .reduce(|acc, row| {
+                    Box::new(acc.zip(row).map(|(a, b)| a & b)) as Box<dyn Iterator<Item = bool>>
+                })
                 .unwrap()
-                .iter()
-                .any(|&b| b)
+                .any(|b| b)
     }
 
     fn score(&self) -> u32 {
-        self.values
-            .iter()
-            .enumerate()
-            .map(|(r, row)| {
-                row.iter()
-                    .enumerate()
-                    .map(|(c, &value)| if self.marked[r][c] { 0 } else { value })
-                    .sum::<u32>()
-            })
-            .sum()
+        let vs = self.values.iter().flat_map(|row| row.iter());
+        let ms = self.marked.iter().flat_map(|row| row.iter());
+        return vs
+            .zip(ms)
+            .filter_map(|(v, &m)| if m { Option::None } else { Option::Some(v) })
+            .sum();
     }
 
     fn mark_value(&self, value: u32) -> BingoCard {
@@ -116,14 +113,18 @@ pub fn part_2(input: &str) -> u32 {
     let values = values_called(input);
 
     for value in values {
-        let score = bingo_cards[0].score();
+        let score = if bingo_cards.len() == 1 {
+            Option::Some(bingo_cards[0].score())
+        } else {
+            Option::None
+        };
         bingo_cards = bingo_cards
             .iter()
             .map(|card| card.mark_value(value))
             .filter(|card| !card.is_winner())
             .collect();
         if bingo_cards.len() == 0 {
-            return (score - value) * value;
+            return (score.unwrap() - value) * value;
         }
     }
     return 0;
