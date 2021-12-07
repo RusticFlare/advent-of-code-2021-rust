@@ -51,13 +51,13 @@ impl Line {
             } else {
                 (self.y2..=self.y1).rev().collect()
             };
-            xs.iter().zip(ys.iter()).map(|(&x,&y)| (x,y)).collect()
+            xs.iter().zip(ys.iter()).map(|(&x, &y)| (x, y)).collect()
         }
     }
 }
 
 pub fn part_1(input: &str) -> usize {
-    let lines:Vec<Line> = parse_lines(input)
+    let lines: Vec<Line> = parse_lines(input)
         .into_iter()
         .filter(|line| line.is_horizontal_or_vertical())
         .collect();
@@ -69,7 +69,8 @@ pub fn part_2(input: &str) -> usize {
 }
 
 fn score(lines: Vec<Line>) -> usize {
-    lines.iter()
+    lines
+        .iter()
         .flat_map(|line| line.points())
         .fold(HashMap::new(), |mut acc, point| {
             *acc.entry(point).or_insert(0) += 1;
