@@ -39,6 +39,29 @@ impl BingoCard {
             })
             .sum()
     }
+
+    fn mark_value(&self, value: u32) -> BingoCard {
+        BingoCard {
+            values: self.values.to_vec(),
+            marked: self
+                .marked
+                .iter()
+                .enumerate()
+                .map(|(r, row)| {
+                    row.iter()
+                        .enumerate()
+                        .map(|(c, &old)| {
+                            if self.values[r][c] == value {
+                                true
+                            } else {
+                                old
+                            }
+                        })
+                        .collect()
+                })
+                .collect(),
+        }
+    }
 }
 
 pub fn part_1(input: &str) -> u32 {
@@ -49,7 +72,7 @@ pub fn part_1(input: &str) -> u32 {
     for value in values {
         bingo_cards = bingo_cards
             .iter()
-            .map(|card| mark_value(card, value))
+            .map(|card| card.mark_value(value))
             .collect();
         let winner = bingo_cards.iter().find(|card| card.is_winner());
         if winner.is_some() {
@@ -96,7 +119,7 @@ pub fn part_2(input: &str) -> u32 {
         let score = bingo_cards[0].score();
         bingo_cards = bingo_cards
             .iter()
-            .map(|card| mark_value(card, value))
+            .map(|card| card.mark_value(value))
             .filter(|card| !card.is_winner())
             .collect();
         if bingo_cards.len() == 0 {
@@ -104,29 +127,6 @@ pub fn part_2(input: &str) -> u32 {
         }
     }
     return 0;
-}
-
-fn mark_value(card: &BingoCard, value: u32) -> BingoCard {
-    BingoCard {
-        values: card.values.iter().map(|i| i.iter().map(|&j| j).collect()).collect(),
-        marked: card
-            .marked
-            .iter()
-            .enumerate()
-            .map(|(r, row)| {
-                row.iter()
-                    .enumerate()
-                    .map(|(c, &old)| {
-                        if card.values[r][c] == value {
-                            true
-                        } else {
-                            old
-                        }
-                    })
-                    .collect()
-            })
-            .collect(),
-    }
 }
 
 #[cfg(test)]
