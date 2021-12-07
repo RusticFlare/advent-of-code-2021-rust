@@ -10,6 +10,6 @@ fn main() {
     println!("Day 2: Part 2: {}", day_2::part_2(day_2::input::INPUT)); // 1765720035
     println!("Day 3: Part 1: {}", day_3::part_1(day_3::input::INPUT)); // 3923414
     println!("Day 3: Part 2: {}", day_3::part_2(day_3::input::INPUT)); // 5852595
-    println!("Day 4: Part 1: {}", day_4::part_1(day_4::input::INPUT)); // ???
+    println!("Day 4: Part 1: {}", day_4::part_1(day_4::input::INPUT)); // 11774
     println!("Day 4: Part 2: {}", day_4::part_2(day_4::input::INPUT)); // ???
 }

@@ -15,36 +15,12 @@ impl BingoCard {
         }
     }
 
-    fn mark_value(self, value: u32) -> BingoCard {
-        BingoCard { marked: self.marked_values(value), .. self }
-    }
-
-    fn marked_values(&self, value: u32) -> Vec<Vec<bool>> {
-        self
-            .marked
-            .iter()
-            .enumerate()
-            .map(|(r, row)| {
-                row.iter()
-                    .enumerate()
-                    .map(|(c, &old)| {
-                        if self.values[r][c] == value {
-                            true
-                        } else {
-                            old
-                        }
-                    })
-                    .collect()
-            })
-            .collect()
-    }
-
     fn is_winner(&self) -> bool {
         self.marked.iter().any(|row| row.iter().all(|&b| b))
             || self
                 .marked
                 .iter()
-                .map(|row| row.iter().map(|&b|b).collect::<Vec<bool>>())
+                .map(|row| row.iter().map(|&b| b).collect::<Vec<bool>>())
                 .reduce(|acc, row| acc.iter().zip(row.iter()).map(|(a, b)| a & b).collect())
                 .unwrap()
                 .iter()
@@ -52,9 +28,15 @@ impl BingoCard {
     }
 
     fn score(&self) -> u32 {
-         self.values.iter()
+        self.values
+            .iter()
             .enumerate()
-            .map(|(r, row)| row.iter().enumerate().map(|(c, &value)| if self.marked[r][c] {0} else {value}).sum::<u32>())
+            .map(|(r, row)| {
+                row.iter()
+                    .enumerate()
+                    .map(|(c, &value)| if self.marked[r][c] { 0 } else { value })
+                    .sum::<u32>()
+            })
             .sum()
     }
 }
@@ -86,7 +68,26 @@ pub fn part_1(input: &str) -> u32 {
     for value in values {
         bingo_cards = bingo_cards
             .iter()
-            .map(|card| BingoCard { marked: card.marked_values(value), ..card })
+            .map(|card| BingoCard {
+                values: card.values.iter().map(|i| i.iter().map(|&j|j).collect()).collect(),
+                marked: card
+                    .marked
+                    .iter()
+                    .enumerate()
+                    .map(|(r, row)| {
+                        row.iter()
+                            .enumerate()
+                            .map(|(c, &old)| {
+                                if card.values[r][c] == value {
+                                    true
+                                } else {
+                                    old
+                                }
+                            })
+                            .collect()
+                    })
+                    .collect(),
+            })
             .collect();
         let winner = bingo_cards.iter().find(|card| card.is_winner());
         if winner.is_some() {
