@@ -93,18 +93,18 @@ fn bingo_cards(input: &str) -> Vec<BingoCard> {
     input
         .split("\n\n")
         .dropping(1)
-        .map(|s| s.lines())
-        .map(|lines| {
-            lines.map(|l| {
-                l.trim()
-                    .split_whitespace()
-                    .map(|i| i.parse::<u32>().unwrap())
-                    .collect()
-            })
+        .map(|s| {
+            s.lines()
+                .map(|l| {
+                    l.trim()
+                        .split_whitespace()
+                        .map(|i| i.parse::<u32>().unwrap())
+                        .collect()
+                })
+                .collect()
         })
-        .map(|s| s.collect::<Vec<Vec<u32>>>())
         .map(|card_values| BingoCard::new(card_values))
-        .collect::<Vec<BingoCard>>()
+        .collect()
 }
 
 pub fn part_2(input: &str) -> u32 {
