@@ -20,5 +20,5 @@ fn main() {
     println!("Day 6: Part 1: {}", day_6::part_1(day_6::input::INPUT)); // 362666
     println!("Day 6: Part 2: {}", day_6::part_2(day_6::input::INPUT)); // 1640526601595
     println!("Day 7: Part 1: {}", day_7::part_1(day_7::input::INPUT)); // 336040
-    println!("Day 7: Part 2: {}", day_7::part_2(day_7::input::INPUT)); // ???
+    println!("Day 7: Part 2: {}", day_7::part_2(day_7::input::INPUT)); // 94813675
 }

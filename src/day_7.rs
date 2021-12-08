@@ -1,5 +1,4 @@
 use itertools::Itertools;
-use std::cmp;
 
 pub mod input;
 
@@ -15,12 +14,17 @@ pub fn part_1(input: &str) -> i32 {
 
 pub fn part_2(input: &str) -> i32 {
     let crabs: Vec<i32> = input.split(",").map(|n| n.parse().unwrap()).collect();
-    let target: i32 = AAAA;
-    return crabs
-        .iter()
-        .map(|&crab| (crab - target).abs())
-        .map(|d| d * (d + 1) / 2)
-        .sum();
+    (*crabs.iter().min().unwrap()..=*crabs.iter().max().unwrap())
+        .into_iter()
+        .map(|t| {
+            crabs
+                .iter()
+                .map(|&crab| (crab - t).abs())
+                .map(|d| d * (d + 1) / 2)
+                .sum()
+        })
+        .min()
+        .unwrap()
 }
 
 #[cfg(test)]
