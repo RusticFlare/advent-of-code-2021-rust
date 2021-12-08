@@ -35,6 +35,6 @@ mod test {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(0, part_2(input::TEST_INPUT));
+        assert_eq!(61229, part_2(input::TEST_INPUT));
     }
 }
