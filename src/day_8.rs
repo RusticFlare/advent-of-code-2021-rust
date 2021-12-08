@@ -2,8 +2,19 @@ use itertools::Itertools;
 
 pub mod input;
 
-pub fn part_1(input: &str) -> i32 {
-    0
+pub fn part_1(input: &str) -> usize {
+    input
+        .lines()
+        .flat_map(|l| {
+            l.split(" | ")
+                .dropping(1)
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .map(|s| s.len())
+        })
+        .filter(|&l| l == 2 || l == 3 || l == 4 || l == 7)
+        .count()
 }
 
 pub fn part_2(input: &str) -> i32 {

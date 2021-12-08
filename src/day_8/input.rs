@@ -1,4 +1,5 @@
-pub static INPUT: &str = "badc bd dbeaf cfdbge dfb cfbdea efbag edcfgab dcafe degfca | eacfd acdfbe cbdegf fcbaedg
+pub static INPUT: &str =
+    "badc bd dbeaf cfdbge dfb cfbdea efbag edcfgab dcafe degfca | eacfd acdfbe cbdegf fcbaedg
 cd fdbac egcfab gbadcfe cfgdeb cbadfe deca cdf dfabg abefc | dcf cfbad gbafced fcd
 cg agecfb cbg eabgfdc egdc fdgba bafecd cbdfe bfcdeg cfgdb | efdcb adcfeb fbdcg gbc
 bfceg gfadb dbcfgea bgaef efad abe bcdgfa ea fbdgea agecbd | eadf ceadbg abfge fecdbga
