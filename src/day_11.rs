@@ -112,8 +112,27 @@ fn flashes(octopuses: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     return next;
 }
 
-pub fn part_2(input: &str) -> u64 {
-    0
+pub fn part_2(input: &str) -> usize {
+    let mut octopuses = input
+        .lines()
+        .map(|l| {
+            l.chars()
+                .map(|c| c.to_digit(10).unwrap())
+                .collect::<Vec<u32>>()
+        })
+        .collect::<Vec<Vec<u32>>>();
+
+    for i in 0..9999999999 {
+        octopuses = next(octopuses);
+        if octopuses
+            .iter()
+            .flat_map(|row| row.iter())
+            .filter(|&&o| o == 0)
+            .count() == 100 {
+            return i + 1;
+        };
+    };
+    return 0;
 }
 
 #[cfg(test)]
@@ -130,6 +149,6 @@ mod test {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(288957, part_2(input::TEST_INPUT));
+        assert_eq!(195, part_2(input::TEST_INPUT));
     }
 }
