@@ -128,10 +128,12 @@ pub fn part_2(input: &str) -> usize {
             .iter()
             .flat_map(|row| row.iter())
             .filter(|&&o| o == 0)
-            .count() == 100 {
+            .count()
+            == 100
+        {
             return i + 1;
         };
-    };
+    }
     return 0;
 }
 

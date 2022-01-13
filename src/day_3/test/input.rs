@@ -1,4 +1,4 @@
-pub static TEST_INPUT: &str =  "00100
+pub static TEST_INPUT: &str = "00100
 11110
 10110
 10111

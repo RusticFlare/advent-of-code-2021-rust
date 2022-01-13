@@ -1,4 +1,4 @@
-pub static TEST_INPUT: &str =  "199
+pub static TEST_INPUT: &str = "199
 200
 208
 210

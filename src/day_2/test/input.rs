@@ -1,4 +1,4 @@
-pub static TEST_INPUT: &str =  "forward 5
+pub static TEST_INPUT: &str = "forward 5
 down 5
 forward 8
 up 3

@@ -1,4 +1,4 @@
-pub static TEST_INPUT: &str =  "0,9 -> 5,9
+pub static TEST_INPUT: &str = "0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
 2,2 -> 2,1
