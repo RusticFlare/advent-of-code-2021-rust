@@ -47,5 +47,5 @@ fn main() {
     println!("Day 15: Part 1: {}", day_15::part_1(day_15::input::INPUT)); // 790
                                                                           // println!("Day 15: Part 2: {}", day_15::part_2(day_15::input::INPUT)); // 2998
     println!("Day 16: Part 1: {}", day_16::part_1(day_16::input::INPUT)); // 913
-    println!("Day 16: Part 2: {}", day_16::part_2(day_16::input::INPUT)); // ?
+    println!("Day 16: Part 2: {}", day_16::part_2(day_16::input::INPUT)); // 1510977819698
 }

@@ -96,7 +96,7 @@ fn to_length_operator(input: &str) -> (Packet, usize) {
     (
         Operator {
             version: u32::from_str_radix(&input[0..3], 2).unwrap(),
-            packet_type_id: u8::from_str_radix(&input[4..6], 2).unwrap(),
+            packet_type_id: u8::from_str_radix(&input[3..6], 2).unwrap(),
             sub_packets,
         },
         index,
@@ -116,7 +116,7 @@ fn to_count_operator(input: &str) -> (Packet, usize) {
     (
         Operator {
             version: u32::from_str_radix(&input[0..3], 2).unwrap(),
-            packet_type_id: u8::from_str_radix(&input[4..6], 2).unwrap(),
+            packet_type_id: u8::from_str_radix(&input[3..6], 2).unwrap(),
             sub_packets,
         },
         index,
@@ -136,6 +136,77 @@ impl Packet {
                 .fold(*version, |p, q| p + q.version_sum()),
         }
     }
+
+    fn evaluate(&self) -> u64 {
+        match &*self {
+            Packet::Literal {
+                packet_type_id: 4,
+                value,
+                ..
+            } => *value,
+            Packet::Operator {
+                packet_type_id: 0,
+                sub_packets,
+                ..
+            } => sub_packets.iter().map(|p| p.evaluate()).sum(),
+            Packet::Operator {
+                packet_type_id: 1,
+                sub_packets,
+                ..
+            } => sub_packets.iter().map(|p| p.evaluate()).product(),
+            Packet::Operator {
+                packet_type_id: 2,
+                sub_packets,
+                ..
+            } => sub_packets.iter().map(|p| p.evaluate()).min().unwrap(),
+            Packet::Operator {
+                packet_type_id: 3,
+                sub_packets,
+                ..
+            } => sub_packets.iter().map(|p| p.evaluate()).max().unwrap(),
+            Packet::Operator {
+                packet_type_id: 5,
+                sub_packets,
+                ..
+            } => {
+                if sub_packets[0].evaluate() > sub_packets[1].evaluate() {
+                    1
+                } else {
+                    0
+                }
+            }
+            Packet::Operator {
+                packet_type_id: 6,
+                sub_packets,
+                ..
+            } => {
+                if sub_packets[0].evaluate() < sub_packets[1].evaluate() {
+                    1
+                } else {
+                    0
+                }
+            }
+            Packet::Operator {
+                packet_type_id: 7,
+                sub_packets,
+                ..
+            } => {
+                if sub_packets[0].evaluate() == sub_packets[1].evaluate() {
+                    1
+                } else {
+                    0
+                }
+            }
+            Packet::Literal { packet_type_id, .. } => {
+                println!("Literal CRY: {}", packet_type_id);
+                0
+            }
+            Packet::Operator { packet_type_id, .. } => {
+                println!("Operator CRY: {}", packet_type_id);
+                0
+            }
+        }
+    }
 }
 
 pub fn part_1(input: &str) -> u32 {
@@ -144,8 +215,10 @@ pub fn part_1(input: &str) -> u32 {
     packet.version_sum()
 }
 
-pub fn part_2(input: &str) -> u32 {
-    0
+pub fn part_2(input: &str) -> u64 {
+    let binary = convert_to_binary_from_hex(input);
+    let (packet, _) = to_packet(binary.as_str());
+    packet.evaluate()
 }
 
 #[cfg(test)]
@@ -157,11 +230,21 @@ mod test {
 
     #[test]
     fn test_part_1() {
-        assert_eq!(31, part_1(input::TEST_INPUT));
+        assert_eq!(16, part_1("8A004A801A8002F478"));
+        assert_eq!(12, part_1("620080001611562C8802118E34"));
+        assert_eq!(23, part_1("C0015000016115A2E0802F182340"));
+        assert_eq!(31, part_1("A0016C880162017C3686B18A3D4780"));
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(0, part_2(input::TEST_INPUT));
+        assert_eq!(3, part_2("C200B40A82"));
+        assert_eq!(54, part_2("04005AC33890"));
+        assert_eq!(7, part_2("880086C3E88112"));
+        assert_eq!(9, part_2("CE00C43D881120"));
+        assert_eq!(1, part_2("D8005AC2A8F0"));
+        assert_eq!(0, part_2("F600BC2D8F"));
+        assert_eq!(0, part_2("9C005AC2F8F0"));
+        assert_eq!(1, part_2("9C0141080250320F1802104A08"));
     }
 }
