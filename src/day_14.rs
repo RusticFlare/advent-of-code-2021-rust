@@ -41,7 +41,7 @@ pub fn part_1(input: &str) -> usize {
     return max - min;
 }
 
-pub fn part_2(input: &str) -> usize {
+pub fn part_2(input: &str) -> u128 {
     0
 }
 
@@ -59,6 +59,6 @@ mod test {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(0, part_2(input::TEST_INPUT));
+        assert_eq!(2188189693529, part_2(input::TEST_INPUT));
     }
 }

@@ -75,9 +75,9 @@ pub fn part_2(input: &str) -> usize {
             })
             .collect()
     }
-    for y in (0 as usize)..*paper.iter().map(|(x, y)| y).max().unwrap() + 1 {
+    for y in (0 as usize)..*paper.iter().map(|(_, y)| y).max().unwrap() + 1 {
         println!();
-        for x in (0 as usize)..*paper.iter().map(|(x, y)| x).max().unwrap() + 1 {
+        for x in (0 as usize)..*paper.iter().map(|(x, _)| x).max().unwrap() + 1 {
             print!("{}", if paper.contains(&(x, y)) { "#" } else { "." })
         }
     }
