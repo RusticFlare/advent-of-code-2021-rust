@@ -5,16 +5,18 @@ use std::u32;
 pub mod input;
 
 pub fn part_1(input: &str) -> i32 {
-    let y_min: i32 = Regex::new("y=(?P<y_min>.*)\\.\\.")
+    let y_min = Regex::new("y=(?P<y_min>.*)\\.\\.")
         .unwrap()
         .captures(input)
         .unwrap()
         .name("y_min")
         .unwrap()
         .as_str()
-        .parse()
-        .unwrap();
-    (1..(y_min.abs())).sum()
+        .parse::<i32>()
+        .unwrap()
+        .abs()
+        - 1;
+    triangle(y_min)
 }
 
 pub fn part_2(input: &str) -> usize {
