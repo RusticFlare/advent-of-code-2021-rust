@@ -7,6 +7,7 @@ mod day_14;
 mod day_15;
 mod day_16;
 mod day_17;
+mod day_18;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -51,4 +52,6 @@ fn main() {
     println!("Day 16: Part 2: {}", day_16::part_2(day_16::input::INPUT)); // 1510977819698
     println!("Day 17: Part 1: {}", day_17::part_1(day_17::input::INPUT)); // 4005
     println!("Day 17: Part 2: {}", day_17::part_2(day_17::input::INPUT)); // 2953
+    println!("Day 18: Part 1: {}", day_18::part_1(day_18::input::INPUT)); // 3884
+    println!("Day 18: Part 2: {}", day_18::part_2(day_18::input::INPUT)); // ?
 }

@@ -1,6 +1,4 @@
-use itertools::Itertools;
 use regex::Regex;
-use std::u32;
 
 pub mod input;
 
