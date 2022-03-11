@@ -147,8 +147,22 @@ pub fn part_1(input: &str) -> u32 {
         .magnitude()
 }
 
-pub fn part_2(input: &str) -> usize {
-    0
+pub fn part_2(input: &str) -> u32 {
+    let snailfish_numbers: Vec<SnailfishNumber> = input
+        .lines()
+        .map(|l| snailfish_number(l).reduce())
+        .collect();
+    snailfish_numbers
+        .iter()
+        .map(|l| {
+            snailfish_numbers
+                .iter()
+                .map(|r| (l.clone() + r.clone()).reduce().magnitude())
+                .max()
+                .unwrap()
+        })
+        .max()
+        .unwrap()
 }
 
 #[cfg(test)]
@@ -197,6 +211,6 @@ mod test {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(112, part_2(input::TEST_INPUT));
+        assert_eq!(3993, part_2(input::TEST_INPUT));
     }
 }
