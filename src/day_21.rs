@@ -45,22 +45,28 @@ pub fn part_1(player_1_start: u32, player_2_start: u32) -> u32 {
 pub fn part_2(player_1: u128, player_2: u128) -> u128 {
     let player_1_finishers_per_round = get_finishers(player_1);
     let player_2_finishers_per_round = get_finishers(player_2);
-    // let player_1_wins =
-    player_1_finishers_per_round
+    let player_1_wins = player_1_finishers_per_round
         .iter()
         .enumerate()
+        .dropping(1)
         .map(|(round, (one_count, _))| {
-            let (f, s) = player_2_finishers_per_round[round];
-            (f + s) * one_count
+            let (_, s) = player_2_finishers_per_round[round - 1];
+            s * one_count
         })
-        .sum() //;
-               // let total_games = 341960390180808 + 444356092776315;
-               // let player_2_wins = total_games - player_1_wins;
-               // if player_1_wins > player_2_wins {
-               //     player_1_wins
-               // } else {
-               //     player_2_wins
-               // }
+        .sum();
+    let player_2_wins = player_2_finishers_per_round
+        .iter()
+        .enumerate()
+        .map(|(round, (two_count, _))| {
+            let (_, s) = player_1_finishers_per_round[round];
+            s * two_count
+        })
+        .sum();
+    if player_1_wins > player_2_wins {
+        player_1_wins
+    } else {
+        player_2_wins
+    }
 }
 
 fn get_finishers(start: u128) -> Vec<(u128, u128)> {
