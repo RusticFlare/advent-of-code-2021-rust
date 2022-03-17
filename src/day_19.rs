@@ -4,7 +4,7 @@ use std::ops::Sub;
 
 pub mod input;
 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Hash)]
 struct Vec3d {
     x: i32,
     y: i32,
@@ -47,7 +47,7 @@ pub fn part_1(input: &str) -> usize {
     for beacon in x.first().unwrap() {
         beacons.insert(beacon);
     }
-    x.0
+    0
 }
 
 pub fn part_2(input: &str) -> u32 {
