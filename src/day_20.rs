@@ -5,7 +5,22 @@ use std::ops::Sub;
 pub mod input;
 
 pub fn part_1(input: &str) -> usize {
-    let on_0: HashSet<(i32, i32)> = input
+    let on_0: HashSet<(i32, i32)> = get_on(input);
+    let off_1: HashSet<(i32, i32)> = next_off(input, on_0);
+    next_on(input, off_1).len()
+}
+
+pub fn part_2(input: &str) -> usize {
+    let mut on: HashSet<(i32, i32)> = get_on(input);
+    for _ in 0..25 {
+        let off: HashSet<(i32, i32)> = next_off(input, on);
+        on = next_on(input, off);
+    }
+    on.len()
+}
+
+fn get_on(input: &str) -> HashSet<(i32, i32)> {
+    input
         .split("\n\n")
         .dropping(1)
         .next()
@@ -18,9 +33,7 @@ pub fn part_1(input: &str) -> usize {
                 .filter(|(_, light)| *light == '#')
                 .map(move |(x, _)| (x as i32 + 1, y as i32 + 1))
         })
-        .collect();
-    let off_1: HashSet<(i32, i32)> = next_off(input, on_0);
-    next_on(input, off_1).len()
+        .collect()
 }
 
 fn next_off(input: &str, on: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
@@ -109,10 +122,6 @@ fn next_on(input: &str, off: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
             }
         })
         .collect()
-}
-
-pub fn part_2(input: &str) -> u32 {
-    0
 }
 
 #[cfg(test)]
